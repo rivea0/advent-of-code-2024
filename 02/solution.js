@@ -4,24 +4,29 @@ async function main() {
   let numSafeReports = 0;
   let numSafeReportsTolerated = 0;
 
-  const f = await fs.open('./input.txt');
+  let fileHandle;
+  try {
+    fileHandle = await fs.open('./input.txt');
 
-  for await (const line of f.readLines()) {
-    const nums = line.split(' ').map((n) => +n);
+    for await (const line of fileHandle.readLines()) {
+      const nums = line.split(' ').map((n) => +n);
 
-    if (isLevelSafe(nums)) {
-      numSafeReports++;
-    }
+      if (isLevelSafe(nums)) {
+        numSafeReports++;
+      }
 
-    let safeRevert;
-    for (let i = 0; i < nums.length; i++) {
-      if (isLevelSafe([...nums.slice(0, i), ...nums.slice(i + 1)])) {
-        safeRevert = true;
+      let safeRevert;
+      for (let i = 0; i < nums.length; i++) {
+        if (isLevelSafe([...nums.slice(0, i), ...nums.slice(i + 1)])) {
+          safeRevert = true;
+        }
+      }
+      if (isLevelSafe(nums) || safeRevert) {
+        numSafeReportsTolerated++;
       }
     }
-    if (isLevelSafe(nums) || safeRevert) {
-      numSafeReportsTolerated++;
-    }
+  } finally {
+    if (fileHandle) await fileHandle.close();
   }
 
   return [numSafeReports, numSafeReportsTolerated];

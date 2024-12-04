@@ -19,11 +19,16 @@ main().then((res) => {
 });
 
 async function splitNumbers() {
-  const f = await fs.open('./input.txt');
-  for await (const line of f.readLines()) {
-    const result = line.split(' ');
-    LEFT_NUMS.push(result[0]);
-    RIGHT_NUMS.push(result[result.length - 1]);
+  let fileHandle;
+  try {
+    fileHandle = await fs.open('./input.txt');
+    for await (const line of fileHandle.readLines()) {
+      const result = line.split(' ');
+      LEFT_NUMS.push(result[0]);
+      RIGHT_NUMS.push(result[result.length - 1]);
+    }
+  } finally {
+    if (fileHandle) await fileHandle.close();
   }
 }
 
