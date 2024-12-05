@@ -1,17 +1,15 @@
 const fs = require('node:fs');
 
-async function main() {
-  const grid = await getGrid();
+main();
 
-  return [part1(grid), part2(grid)];
+function main() {
+  const grid = getGrid();
+
+  console.log(`Part 1 answer: ${part1(grid)}`);
+  console.log(`Part 2 answer: ${part2(grid)}`);
 }
 
-main().then((res) => {
-  console.log(`Part 1 answer: ${res[0]}`);
-  console.log(`Part 2 answer: ${res[1]}`);
-});
-
-async function getGrid() {
+function getGrid() {
   const str = fs.readFileSync('./input.txt', 'utf8');
 
   return str.split('\n');
